@@ -1,3 +1,6 @@
+using CoinStore.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace CoinStore
 {
     public class Program
@@ -8,6 +11,12 @@ namespace CoinStore
 
 
             var builder = WebApplication.CreateBuilder(args);
+
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.AddDbContext<StoreDbContext>(opt => opt.UseSqlServer(connectionString));
+
+            builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
