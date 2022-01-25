@@ -1,5 +1,18 @@
-﻿@{
+﻿@model IQueryable<Product>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<h3>Welcome to CoinShop</h3>
+@foreach (var p in Model)
+{
+    <div>
+        <p>
+
+            <h4>@p.Name</h4>
+            @p.Description
+            <h5>@p.Price.ToString("c")</h5>
+
+        </p>
+    </div>
+}

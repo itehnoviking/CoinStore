@@ -6,9 +6,16 @@ namespace CoinStore.Controllers
 {
     public class HomeController : Controller
     {
-        public async Task<IActionResult> Index()
+        private IStoreRepository repository;
+
+        public HomeController(IStoreRepository repo)
         {
-            return View();
+            repository = repo;
+        }
+
+        public IActionResult Index()
+        {
+            return View(repository.Products);
         }
     }
 }
