@@ -1,9 +1,8 @@
 ﻿using CoinStore.Infrastructure;
-using Hangfire.Dashboard;
+using CoinStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Xrm.Sdk.Query;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,13 @@ namespace CoinStore.Test
                 .Returns(urlHelper.Object);
             PageLinkTagHelper helper = new PageLinkTagHelper(urlHelperFactory.Object)
             {
-                PageModel = new Pager(2, 10, 28),
+                PageModel = new PagingInfo
+                {
+                    CurrentPage = 2,
+                    TotalItems = 28,
+                    ItemsPerPage = 10
+                },
+                
                 PageAction = "Test"
             };
 

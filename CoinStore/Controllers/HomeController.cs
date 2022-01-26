@@ -1,4 +1,5 @@
 ﻿using CoinStore.Models;
+using CoinStore.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,7 +7,7 @@ namespace CoinStore.Controllers
 {
     public class HomeController : Controller
     {
-        private IStoreRepository repository;
+        private readonly IStoreRepository repository;
         public int PageSize = 3;
 
         public HomeController(IStoreRepository repo)
@@ -14,9 +15,27 @@ namespace CoinStore.Controllers
             repository = repo;
         }
 
-        public ViewResult Index (int productPage = 1)
+        public IActionResult Index (string category, int productPage = 1)
         {
-            return View(repository.Products.OrderBy(p => p.ProductId).Skip((productPage - 1) * PageSize).Take(PageSize));
+            return View(
+                new ProductsListViewModel
+                {
+                    Products = repository.Products
+                    .Where(p => category == null || p.Category == category)
+                    .OrderBy(p => p.ProductId)
+                    .Skip((productPage - 1) * PageSize)
+                    .Take(PageSize),
+
+                    PagingInfo = new PagingInfo
+                    {
+                        CurrentPage = productPage,
+                        ItemsPerPage = PageSize,
+                        TotalItems = repository.Products.Count()
+                    },
+                    CurrentCategory = category
+                }); 
+            
+            
         }
     }
 }

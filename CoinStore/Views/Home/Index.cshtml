@@ -1,18 +1,18 @@
-﻿@model IQueryable<Product>
+﻿@using CoinStore.Models.ViewModels
+
+@model ProductsListViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-@foreach (var p in Model)
+@foreach (var p in Model.Products)
 {
-    <div>
-        <p>
-
-            <h4>@p.Name</h4>
-            @p.Description
-            <h5>@p.Price.ToString("c")</h5>
-
-        </p>
-    </div>
+    <partial name="ProductSummary" model="p" />
 }
+
+<div page-model="@Model.PagingInfo" page-action="Index"
+    page-classes-enabled="true"
+    page-class="btn" page-class-normal="btn-outline-dark"
+    page-class-selected="btn-primary" class="btn-group pull-right m-1">
+</div>

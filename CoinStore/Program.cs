@@ -32,7 +32,7 @@ namespace CoinStore
             }
 
             app.UseDeveloperExceptionPage();
-            app.UseStatusCodePages();
+            //app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -43,6 +43,17 @@ namespace CoinStore
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute("pagination", "Products/Page{productPage}", new
+                {
+                    Controller = "Home",
+                    action = "Index"
+                });
+
+                endpoints.MapDefaultControllerRoute();
+            });
 
             SeedData.EnsurePopulated(app);
 
