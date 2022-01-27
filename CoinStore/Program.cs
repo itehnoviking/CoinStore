@@ -40,20 +40,16 @@ namespace CoinStore
 
             app.UseAuthorization();
 
+            
+            app.MapControllerRoute("catpage", "{category}/Page{productPage:int}", new { controller = "Home", action = "index" });
+            app.MapControllerRoute("page", "Page{productPage:int}", new { controller = "Home", action = "index", productPage = 1 });
+            app.MapControllerRoute("category", "{category}", new { controller = "Home", action = "index", productPage = 1 });
+            app.MapControllerRoute("pagination", "Products/Page{productPage}", new { controller = "Home", action = "index", productPage = 1 });
+
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute("pagination", "Products/Page{productPage}", new
-                {
-                    Controller = "Home",
-                    action = "Index"
-                });
-
-                endpoints.MapDefaultControllerRoute();
-            });
 
             SeedData.EnsurePopulated(app);
 
