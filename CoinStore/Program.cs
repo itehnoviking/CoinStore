@@ -17,6 +17,7 @@ namespace CoinStore
             builder.Services.AddDbContext<StoreDbContext>(opt => opt.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
+            builder.Services.AddRazorPages();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -49,6 +50,7 @@ namespace CoinStore
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
 
             SeedData.EnsurePopulated(app);
