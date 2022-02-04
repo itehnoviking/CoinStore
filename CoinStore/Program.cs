@@ -18,6 +18,8 @@ namespace CoinStore
 
             builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
             builder.Services.AddRazorPages();
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -36,7 +38,7 @@ namespace CoinStore
             //app.UseStatusCodePages();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthorization();

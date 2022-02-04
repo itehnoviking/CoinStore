@@ -7,12 +7,12 @@ namespace CoinStore.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IStoreRepository repository;
+        private readonly IStoreRepository _repository;
         public int PageSize = 3;
 
-        public HomeController(IStoreRepository repo)
+        public HomeController(IStoreRepository repository)
         {
-            repository = repo;
+            _repository = repository;
         }
 
         public ViewResult Index (string category, int productPage = 1)
@@ -20,7 +20,7 @@ namespace CoinStore.Controllers
             return View(
                 new ProductsListViewModel
                 {
-                    Products = repository.Products
+                    Products = _repository.Products
                     .Where(p => category == null || p.Category == category)
                     .OrderBy(p => p.ProductId)
                     .Skip((productPage - 1) * PageSize)
@@ -31,8 +31,8 @@ namespace CoinStore.Controllers
                         CurrentPage = productPage,
                         ItemsPerPage = PageSize,
                         TotalItems = category == null?
-                        repository.Products.Count() :
-                        repository.Products.Where(e => e.Category == category)
+                        _repository.Products.Count() :
+                        _repository.Products.Where(e => e.Category == category)
                         .Count()
                     },
                     CurrentCategory = category
