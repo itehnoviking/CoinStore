@@ -20,6 +20,8 @@ namespace CoinStore
             builder.Services.AddRazorPages();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
+            builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();

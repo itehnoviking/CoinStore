@@ -52,7 +52,7 @@ namespace CoinStore.Test
             }).AsQueryable<Product>());
 
             HomeController controller = new HomeController(mock.Object);
-            controller.PageSize = 2;
+            controller.PageSize = 3;
 
             //Act
             ProductsListViewModel result = controller.Index(null, 2).ViewData.Model as ProductsListViewModel;

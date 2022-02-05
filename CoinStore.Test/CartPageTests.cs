@@ -33,75 +33,44 @@ namespace CoinStore.Test
             testCart.AddItem(p1, 2);
             testCart.AddItem(p2, 1);
 
-            //Arrange - creating a simulated page and session context
-            Mock<ISession> mockSession = new Mock<ISession>();
-            byte[] data = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(testCart));
-            mockSession.Setup(c => c.TryGetValue(It.IsAny<string>(), out data));
-
-            Mock<HttpContext> mockContext = new Mock<HttpContext>();
-            mockContext.SetupGet(c => c.Session).Returns(mockSession.Object);
-
             //Act
-            CartModel cartModel = new CartModel(mockRepo.Object)
-            {
-                PageContext = new PageContext(new ActionContext
-                {
-                    HttpContext = mockContext.Object,
-                    RouteData = new RouteData(),
-                    ActionDescriptor = new PageActionDescriptor()
-                })
-            };
-
-            cartModel.OnGet("myUrl");
+            CartModel cartModel = new CartModel(mockRepo.Object, testCart);cartModel.OnGet("myUrl");
 
             //Assert
             Assert.Equal(2, cartModel.Cart.Lines.Count());
             Assert.Equal("myUrl", cartModel.ReturnUrl);
         }
 
-        //[Fact]
-        //public void Can_Update_Cart()
-        //{
-        //    //Arrange - created several testing products
-        //    Mock<IStoreRepository> mockRepo = new Mock<IStoreRepository>();
-        //    mockRepo.Setup(m => m.Products).Returns((new Product[]
-        //    {
-        //        new Product
-        //        {
-        //            ProductId = Guid.NewGuid(),
-        //            Name = "P1"
-        //        }
+        [Fact]
+        public void Can_Update_Cart()
+        {
+            //Arrange - created several testing products
+            Guid guid = new Guid("BF7307B661FC4D58A2111C8B381D7DE8");
+            Mock<IStoreRepository> mockRepo = new Mock<IStoreRepository>();
+            mockRepo.Setup(m => m.Products).Returns((new Product[]
+            {
+                new Product
+                {
+                    ProductId = guid,
+                    Name = "P1"
+                }
 
-        //    }).AsQueryable<Product>());
+            }).AsQueryable<Product>());
 
-        //    //Arrange - created new cart
-        //    Cart testCart = new Cart();
+            //Arrange - created new cart
+            Cart testCart = new Cart();
 
-        //    //Arrange - creating a simulated page and session context
-        //    Mock<ISession> mockSession = new Mock<ISession>();
-        //    mockSession.Setup(s => s.Set(It.IsAny<string>(), It.IsAny<byte[]>()))
-        //        .Callback<string, byte[]>((key, val) =>
-        //        {
-        //            testCart = JsonSerializer.Deserialize<Cart>(Encoding.UTF8.GetString(val));
-        //        });
+            //Act
+            CartModel cartModel = new CartModel(mockRepo.Object, testCart);
 
-        //    Mock<HttpContext> mockContext = new Mock<HttpContext>();
-        //    mockContext.SetupGet(c => c.Session).Returns(mockSession.Object);
+            cartModel.OnPost(guid, "myUrl");
 
-        //    //Act
-        //    CartModel cartModel = new CartModel(mockRepo.Object)
-        //    {
-        //        PageContext = new PageContext(new ActionContext
-        //        {
-        //            HttpContext = mockContext.Object,
-        //            RouteData = new RouteData(),
-        //            ActionDescriptor = new PageActionDescriptor()
-        //        })
-        //    };
-
-        //    cartModel.OnPost (Product.InitialDatabase., "myUrl");
+            //Assert
+            Assert.Single(testCart.Lines);
+            Assert.Equal("P1", testCart.Lines.First().Product.Name);
+            Assert.Equal(1, testCart.Lines.First().Quantity);
 
 
-        //}
+        }
     }
 }

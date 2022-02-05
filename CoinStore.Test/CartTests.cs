@@ -75,7 +75,7 @@ namespace CoinStore.Test
             target.AddItem(p2, 1);
 
             //Act
-            target.Removeline(p2);
+            target.RemoveLine(p2);
 
             //Assert
             Assert.Empty(target.Lines.Where(c => c.Product == p2));
