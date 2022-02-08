@@ -14,7 +14,7 @@
 
         public virtual void AddItem(Product product, int quantity)
         {
-            CartLine line = Lines
+            CartLine? line = Lines
                 .Where(p => p.Product.ProductId == product.ProductId)
                 .FirstOrDefault();
             if(line == null)

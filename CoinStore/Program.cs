@@ -17,6 +17,7 @@ namespace CoinStore
             builder.Services.AddDbContext<StoreDbContext>(opt => opt.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IStoreRepository, EFStoreRepository>();
+            builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
             builder.Services.AddRazorPages();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
