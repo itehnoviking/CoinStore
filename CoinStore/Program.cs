@@ -6,7 +6,7 @@ namespace CoinStore
     public class Program
     {
 
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
 
 
@@ -23,6 +23,19 @@ namespace CoinStore
             builder.Services.AddSession();
             builder.Services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
             builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //builder.Services.AddServerSideBlazor();
+
+            //builder.Services.AddServerSideBlazor().AddCircuitOptions(o => {
+            //    o.DetailedErrors = _env.IsDevelopment;
+            //}).AddHubOptions(opt => {
+            //    opt.MaximumReceiveMessageSize = 10 * 1024 * 1024; // 10MB
+            //});
+
+            builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
+
+
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -46,7 +59,27 @@ namespace CoinStore
 
             app.UseAuthorization();
 
-            
+            //app.UseEndpoints(endpoints => {
+            //    endpoints.MapControllerRoute("catpage",
+            //        "{category}/Page{productPage:int}",
+            //        new { Controller = "Home", action = "Index" });
+
+            //    endpoints.MapControllerRoute("page", "Page{productPage:int}",
+            //        new { Controller = "Home", action = "Index", productPage = 1 });
+
+            //    endpoints.MapControllerRoute("category", "{category}",
+            //        new { Controller = "Home", action = "Index", productPage = 1 });
+
+            //    endpoints.MapControllerRoute("pagination",
+            //        "Products/Page{productPage}",
+            //        new { Controller = "Home", action = "Index", productPage = 1 });
+            //    endpoints.MapDefaultControllerRoute();
+            //    endpoints.MapRazorPages();
+            //    endpoints.MapBlazorHub();
+            //    endpoints.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");
+            //});
+
+
             app.MapControllerRoute("catpage", "{category}/Page{productPage:int}", new { controller = "Home", action = "index" });
             app.MapControllerRoute("page", "Page{productPage:int}", new { controller = "Home", action = "index", productPage = 1 });
             app.MapControllerRoute("category", "{category}", new { controller = "Home", action = "index", productPage = 1 });
@@ -55,7 +88,12 @@ namespace CoinStore
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapDefaultControllerRoute();
             app.MapRazorPages();
+            app.MapBlazorHub();
+            app.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");
+            
 
 
             SeedData.EnsurePopulated(app);

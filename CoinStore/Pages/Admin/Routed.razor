@@ -1,0 +1,19 @@
+﻿<Router AppAssembly="@typeof(Program).Assembly"
+        AdditionalAssemblies="new[]{typeof(Program).Assembly}">
+    <Found>
+        <RouteView RouteData="@context" DefaultLayout="typeof(AdminLayout)" />
+    </Found>
+    <NotFound>
+        <h4 class="bg-danger text-white text-center p-2">
+            No Matching Route Found
+        </h4>
+    </NotFound>
+</Router>
+
+
+
+
+
+
+@*<Router AppAssebly="typeof(CoinStore.Program).Assembly"
+    AdditionalAssemblies="new[]{typeof(CoinStore.Program).Assembly}">*@
