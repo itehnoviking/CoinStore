@@ -93,7 +93,7 @@ namespace CoinStore
             app.MapRazorPages();
             app.MapBlazorHub();
             app.MapFallbackToPage("/admin/{*catchall}", "/Admin/Index");
-            
+
 
 
             SeedData.EnsurePopulated(app);
